@@ -1,0 +1,63 @@
+{
+  "manifest_version": 3,
+  "name": "Meet Random Picker - Gọi ngẫu nhiên học sinh Google Meet",
+  "short_name": "MeetRandom",
+  "version": "1.0.0",
+  "description": "Chrome Extension hỗ trợ giáo viên gọi học sinh ngẫu nhiên trong Google Meet không trùng lặp, tự động nhận diện người tham gia theo thời gian thực.",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://meet.google.com/*"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Meet Random Picker",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*"],
+      "js": [
+        "core/random-engine.js",
+        "core/student-manager.js",
+        "content/participant-detector.js",
+        "content/meet-widget.js"
+      ],
+      "css": [
+        "content/meet-widget.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "random-pick": {
+      "suggested_key": {
+        "default": "Alt+Shift+R",
+        "mac": "Command+Shift+R"
+      },
+      "description": "Gọi ngẫu nhiên học sinh tiếp theo"
+    },
+    "toggle-widget": {
+      "suggested_key": {
+        "default": "Alt+Shift+W",
+        "mac": "Command+Shift+W"
+      },
+      "description": "Bật/tắt thanh công cụ tiện ích nổi trong Meet"
+    }
+  }
+}

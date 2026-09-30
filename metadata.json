@@ -1,0 +1,6 @@
+{
+  "name": "Meet Random Picker - Chrome Extension for Google Meet",
+  "description": "Chrome Extension Manifest V3 hỗ trợ giáo viên gọi học sinh ngẫu nhiên trong Google Meet không trùng lặp, tự động nhận diện người tham gia theo thời gian thực.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

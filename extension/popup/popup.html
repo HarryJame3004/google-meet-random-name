@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meet Random Picker</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-brand">
+        <span class="app-logo">🎓</span>
+        <div class="brand-text">
+          <h1>Meet Random Picker</h1>
+          <span class="subtitle">Gọi học sinh ngẫu nhiên Google Meet</span>
+        </div>
+      </div>
+      <button id="btnSettingsToggle" class="icon-btn" title="Cài đặt">⚙️</button>
+    </header>
+
+    <!-- Main View -->
+    <div id="mainView" class="view-panel active">
+      <!-- Stats Dashboard -->
+      <section class="stats-card">
+        <div class="stat-pill total">
+          <span class="pill-label">👥 Học sinh</span>
+          <span class="pill-value" id="statTotal">0</span>
+        </div>
+        <div class="stat-pill called">
+          <span class="pill-label">✓ Đã gọi</span>
+          <span class="pill-value" id="statCalled">0</span>
+        </div>
+        <div class="stat-pill remaining">
+          <span class="pill-label">○ Còn lại</span>
+          <span class="pill-value" id="statRemaining">0</span>
+        </div>
+      </section>
+
+      <!-- Primary Action Button -->
+      <div class="action-section">
+        <button id="btnRandom" class="primary-random-btn">
+          <span class="dice-icon">🎲</span>
+          <span class="btn-text">RANDOM HỌC SINH</span>
+        </button>
+      </div>
+
+      <!-- Result Showcase -->
+      <section class="last-selected-card" id="lastSelectedCard">
+        <div class="card-divider"></div>
+        <div class="result-meta" id="resultMeta">Lần chọn gần nhất:</div>
+        <div class="selected-name" id="selectedName">— Chưa quay —</div>
+        <div class="card-divider"></div>
+      </section>
+
+      <!-- Secondary Toolbar -->
+      <div class="action-grid">
+        <button id="btnViewStudents" class="secondary-btn">
+          <span class="btn-icon">👁</span>
+          <span>Xem danh sách (<span id="btnListCount">0</span>)</span>
+        </button>
+        <button id="btnResetSession" class="secondary-btn danger">
+          <span class="btn-icon">🔄</span>
+          <span>RESET VÒNG</span>
+        </button>
+      </div>
+
+      <!-- Connection Status Footer -->
+      <footer class="status-footer">
+        <div class="status-indicator">
+          <span class="status-dot connected" id="statusDot"></span>
+          <span class="status-text" id="statusText">🟢 Đang kết nối Google Meet...</span>
+        </div>
+        <span class="shortcut-tip">Phím tắt: Alt+Shift+R</span>
+      </footer>
+    </div>
+
+    <!-- Student List View (Slide-over) -->
+    <div id="listView" class="view-panel">
+      <div class="panel-header">
+        <button id="btnBackFromList" class="back-btn">← Quay lại</button>
+        <div class="panel-title">Danh sách học sinh (<span id="listTitleCount">0</span>)</div>
+        <button id="btnRefreshList" class="icon-btn" title="Quét lại DOM">🔄</button>
+      </div>
+
+      <div class="list-stats-banner">
+        <span>✓ <b id="subCalledCount">0</b> Đã gọi</span>
+        <span>○ <b id="subRemainCount">0</b> Chưa gọi</span>
+        <span>✕ <b id="subExcludeCount">0</b> Loại trừ</span>
+      </div>
+
+      <div class="search-box">
+        <input type="text" id="searchStudentInput" placeholder="🔍 Tìm tên học sinh...">
+      </div>
+
+      <div class="student-scroll-list" id="studentListContainer">
+        <!-- Rendered items -->
+      </div>
+    </div>
+
+    <!-- Settings View (Slide-over) -->
+    <div id="settingsView" class="view-panel">
+      <div class="panel-header">
+        <button id="btnBackFromSettings" class="back-btn">← Quay lại</button>
+        <div class="panel-title">Cài đặt</div>
+      </div>
+
+      <div class="settings-list">
+        <label class="setting-item">
+          <div class="setting-info">
+            <span class="setting-title">Hiệu ứng âm thanh</span>
+            <span class="setting-desc">Phát chuông chúc mừng khi chọn</span>
+          </div>
+          <input type="checkbox" id="settingSound" checked>
+        </label>
+
+        <label class="setting-item">
+          <div class="setting-info">
+            <span class="setting-title">Hiệu ứng chuyển tên (Animation)</span>
+            <span class="setting-desc">Chạy lướt tên trước khi dừng</span>
+          </div>
+          <input type="checkbox" id="settingAnim" checked>
+        </label>
+
+        <label class="setting-item">
+          <div class="setting-info">
+            <span class="setting-title">Loại trừ Giáo viên (Host)</span>
+            <span class="setting-desc">Tự phát hiện và không gọi giáo viên</span>
+          </div>
+          <input type="checkbox" id="settingExcludeHost" checked>
+        </label>
+
+        <label class="setting-item">
+          <div class="setting-info">
+            <span class="setting-title">Widget nổi trong Google Meet</span>
+            <span class="setting-desc">Thanh bấm nổi trực tiếp trên màn hình Meet</span>
+          </div>
+          <input type="checkbox" id="settingWidget" checked>
+        </label>
+
+        <label class="setting-item">
+          <div class="setting-info">
+            <span class="setting-title">Chế độ Debug Console</span>
+            <span class="setting-desc">Ghi nhật ký [MeetRandom] chi tiết</span>
+          </div>
+          <input type="checkbox" id="settingDebug">
+        </label>
+      </div>
+
+      <div class="settings-version">Meet Random Picker v1.0.0 • Manifest V3</div>
+    </div>
+  </div>
+
+  <script src="../core/random-engine.js"></script>
+  <script src="../core/student-manager.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
